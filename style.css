@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #fff7f5;
+    color: #49383b;
+}
+
+header {
+    background: #000000;
+    padding: 25px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 32px;
+    color: white;
+}
+
+nav {
+    margin-top: 15px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 12px;
+    font-weight: bold;
+}
+
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+    background: #ff908a;
+}
+
+.hero h2 {
+    font-size: 38px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+button {
+    background: #ff657a;
+    color: white;
+    border: none;
+    padding: 13px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #7b3a44;
+}
+
+section {
+    padding: 55px 20px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 25px;
+}
+
+.services {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    width: 260px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px #00000012;
+}
+
+.card h3 {
+    margin-bottom: 15px;
+}
+
+.price {
+    color: #fd5a78da;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.booking {
+    background: #f5e2e1;
+}
+
+form {
+    max-width: 450px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+input, select {
+    width: 100%;
+    padding: 13px;
+    margin: 10px 0;
+    border: 1px solid #d9bfc1;
+    border-radius: 8px;
+}
+
+#result {
+    margin: 15px;
+    font-weight: bold;
+    color: #a85e69;
+}
+
+#message {
+    margin-top: 15px;
+    color: green;
+}
+
+footer {
+    background: #000000e7;
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
