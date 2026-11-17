@@ -1,130 +1,143 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8f4ef">
+    <meta name="description" content="Маникюр от мастера Вероники. Аккуратный уход, красивое покрытие и онлайн-запись.">
+    <title>Veronika Nail Studio — маникюр с вниманием к деталям</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script>window.VERONIKA_API_URL = "https://veronikasalon-api0-lolipop-1488116188-dzg4.onreza.app";</script>
     <script src="script.js" defer></script>
 </head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Маникюр | Мастер Вероника</title>
 <body>
-
-<header>
-    <h1>Nail Master</h1>
-    <nav>
+<header class="site-header">
+    <a class="brand" href="#home" aria-label="Veronika Nail Studio — главная">
+        <span class="brand-mark">V.</span>
+        <span class="brand-name">VERONIKA <small>NAIL STUDIO</small></span>
+    </a>
+    <nav aria-label="Основная навигация">
         <a href="#home">Главная</a>
         <a href="#services">Услуги</a>
-        <a href="#booking">Запись</a>
+        <a href="#about">О мастере</a>
+        <a class="nav-cta" href="#booking">Записаться <span>↗</span></a>
     </nav>
 </header>
 
-<section class="hero" id="home">
-    <h2>Красивые ногти — хорошее настроение!</h2>
-    <p>Маникюр в салоне красоты «Татьяна»</p>
-    <p>Мастер Вероника приглашает вас на процедуры.</p>
-    <button onclick="location.href='#booking'">
-        Записаться онлайн
-    </button>
-</section>
-
-<section id="services">
-    <h2>Наши услуги и цены</h2>
-
-    <div class="services">
-
-        <div class="card">
-            <h3>Простой маникюр</h3>
-            <p class="price">1200 ₽</p>
+<main>
+    <section class="hero" id="home">
+        <div class="hero-copy">
+            <p class="eyebrow"><span></span> BEAUTY IN EVERY DETAIL</p>
+            <h1>Красота<br>начинается <em>с заботы.</em></h1>
+            <p class="hero-text">Маникюр, в котором важна каждая деталь. Эстетика, аккуратность и время только для себя.</p>
+            <div class="hero-actions">
+                <a class="primary-button" href="#booking">Выбрать время <span>↗</span></a>
+                <a class="text-link" href="#services">Посмотреть услуги</a>
+            </div>
+            <div class="hero-note"><span class="note-line"></span><span>Мастер Вероника · Салон красоты «Татьяна»</span></div>
         </div>
-
-        <div class="card">
-            <h3>Маникюр в один тон</h3>
-            <p class="price">1800 ₽</p>
+        <div class="hero-art" aria-label="Эстетичная композиция в оттенках розового">
+            <div class="art-orbit orbit-one"></div>
+            <div class="art-orbit orbit-two"></div>
+            <div class="art-sun"></div>
+            <div class="art-card">
+                <span class="art-caption">THE ART OF</span>
+                <span class="art-script">being<br>beautiful</span>
+                <span class="art-bottom">NAIL CARE · SELF LOVE</span>
+            </div>
+            <span class="art-side">SOFTNESS IS A STATEMENT</span>
+            <span class="art-number">01 / 03</span>
         </div>
+        <div class="hero-bottom"><span>01 — 03</span><span>CARE · STYLE · CONFIDENCE</span><span>SCROLL TO EXPLORE ↓</span></div>
+    </section>
 
-        <div class="card">
-            <h3>Ремонт ногтя</h3>
-            <p class="price">50 ₽</p>
+    <section class="intro-strip" id="about">
+        <p class="eyebrow">YOUR LITTLE BEAUTY RITUAL</p>
+        <h2>Не просто маникюр.<br><em>Ваше время для себя.</em></h2>
+        <p class="intro-copy">Создаём ухоженный и гармоничный образ — с вниманием к вашим пожеланиям и любовью к деталям.</p>
+    </section>
+
+    <section class="services-section" id="services">
+        <div class="section-heading">
+            <div><p class="eyebrow">НАШИ УСЛУГИ</p><h2>Выберите свой <em>ритуал</em></h2></div>
+            <p>Чистая эстетика<br>и забота о деталях.</p>
         </div>
-
-        <div class="card">
-            <h3>Донаращивание</h3>
-            <p class="price">100 ₽</p>
+        <div class="services">
+            <article class="service-card service-featured">
+                <span class="service-index">01</span><span class="service-symbol">✳</span>
+                <h3>Простой маникюр</h3><p>Аккуратная обработка и ухоженный вид ногтей.</p>
+                <div class="service-price"><strong>1 200 ₽</strong><span>основная услуга</span></div>
+            </article>
+            <article class="service-card">
+                <span class="service-index">02</span><span class="service-symbol">✧</span>
+                <h3>Маникюр в один тон</h3><p>Идеальное однотонное покрытие на каждый день.</p>
+                <div class="service-price"><strong>1 800 ₽</strong><span>основная услуга</span></div>
+            </article>
+            <article class="service-card">
+                <span class="service-index">03</span><span class="service-symbol">＋</span>
+                <h3>Ремонт ногтя</h3><p>Дополнительная забота о каждом ноготке.</p>
+                <div class="service-price"><strong>50 ₽</strong><span>за ноготь</span></div>
+            </article>
+            <article class="service-card">
+                <span class="service-index">04</span><span class="service-symbol">⌁</span>
+                <h3>Донаращивание</h3><p>Коррекция длины и формы ногтя.</p>
+                <div class="service-price"><strong>100 ₽</strong><span>за ноготь</span></div>
+            </article>
+            <article class="service-card">
+                <span class="service-index">05</span><span class="service-symbol">♡</span>
+                <h3>Наращивание</h3><p>Дополнительная длина для вашего образа.</p>
+                <div class="service-price"><strong>150 ₽</strong><span>за ноготь</span></div>
+            </article>
         </div>
+    </section>
 
-        <div class="card">
-            <h3>Наращивание</h3>
-            <p class="price">150 ₽</p>
+    <section class="booking-section" id="booking">
+        <div class="booking-aside">
+            <p class="eyebrow">ONLINE APPOINTMENT</p>
+            <h2>Время для<br><em>красоты.</em></h2>
+            <p>Заполните форму, чтобы выбрать удобный день и время. Я буду ждать вас!</p>
+            <div class="booking-detail"><span class="detail-icon">◷</span><span><b>График работы</b><small>Ежедневно · 12:00–20:00</small></span></div>
+            <div class="booking-detail"><span class="detail-icon">✧</span><span><b>Время процедуры</b><small>Около 2–2,5 часов</small></span></div>
         </div>
+        <div class="booking-panel">
+            <div class="form-heading"><span>ВАША ЗАПИСЬ</span><span>01 — 05</span></div>
+            <form id="bookingForm">
+                <label for="name">Как к вам обращаться?</label>
+                <input type="text" id="name" placeholder="Ваше имя" autocomplete="name" required>
+                <label for="phone">Номер телефона</label>
+                <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" autocomplete="tel" required>
+                <label for="service">Выберите услугу</label>
+                <select id="service">
+                    <option value="1200">Простой маникюр — 1 200 ₽</option>
+                    <option value="1800">Маникюр в один тон — 1 800 ₽</option>
+                </select>
+                <label for="extra">Дополнительно</label>
+                <select id="extra">
+                    <option value="0">Без дополнительных услуг</option>
+                    <option value="50">Ремонт — 50 ₽</option>
+                    <option value="100">Донаращивание — 100 ₽</option>
+                    <option value="150">Наращивание — 150 ₽</option>
+                </select>
+                <div class="form-row">
+                    <div><label for="date">Дата</label><input type="date" id="date" required></div>
+                    <div><label for="time">Время</label><select id="time" required><option value="">Выберите</option><option value="12:00">12:00</option><option value="17:30">17:30</option></select></div>
+                </div>
+                <div id="result">Стоимость: 1 200 ₽</div>
+                <button class="primary-button submit-button" type="submit">Подтвердить запись <span>↗</span></button>
+                <p id="message" role="status" aria-live="polite"></p>
+                <p class="form-privacy">Нажимая кнопку, вы отправляете заявку на запись.</p>
+            </form>
+        </div>
+    </section>
+</main>
 
-    </div>
-</section>
-
-<section class="booking" id="booking">
-
-    <h2>Онлайн-запись</h2>
-
-    <form id="bookingForm">
-
-        <input
-            type="text"
-            id="name"
-            placeholder="Ваше имя"
-            required
-        >
-
-        <input
-            type="tel"
-            id="phone"
-            placeholder="Ваш телефон"
-            required
-        >
-
-        <select id="service">
-            <option value="1200">Простой маникюр — 1200 ₽</option>
-            <option value="1800">Маникюр в один тон — 1800 ₽</option>
-        </select>
-
-        <select id="extra">
-            <option value="0">Без дополнительных услуг</option>
-            <option value="50">Ремонт — 50 ₽</option>
-            <option value="100">Донаращивание — 100 ₽</option>
-            <option value="150">Наращивание — 150 ₽</option>
-        </select>
-
-<input
-            type="date"
-            id="date"
-            required
-        >
-
-        <select id="time" required>
-            <option value="">Выберите время</option>
-            <option value="12:00">12:00</option>
-            <option value="17:30">17:30</option>
-        </select>
-
-        <div id="result">Стоимость: 1200 ₽</div>
-
-        <button type="submit">Записаться</button>
-
-        <p id="message"></p>
-
-    </form>
-</section>
-
-<section>
-    <h2>График работы</h2>
-    <p>Ежедневно с 12:00 до 20:00</p>
-    <p>Продолжительность процедуры: 2–2,5 часа</p>
-    <p>Перерыв между клиентами: не менее 3 часов</p>
-</section>
-
-<footer>
-    <p>Салон красоты «Татьяна»</p>
-    <p>Мастер маникюра Вероника</p>
-    <p>© 2026 Все права защищены</p>
+<footer class="site-footer">
+    <a class="brand footer-brand" href="#home"><span class="brand-mark">V.</span><span class="brand-name">VERONIKA <small>NAIL STUDIO</small></span></a>
+    <p>Красота в каждой детали.</p>
+    <span>© 2026 · Мастер Вероника · Салон «Татьяна»</span>
 </footer>
 </body>
 </html>
