@@ -12,12 +12,20 @@ app.set("trust proxy", 1);
 app.use(express.json({ limit: "8kb" }));
 
 // Для опубликованного сайта задайте CLIENT_ORIGIN равным адресу фронтенда.
-const allowedOrigin = process.env.CLIENT_ORIGIN || "*";
+const allowedOrigins = (process.env.CLIENT_ORIGIN || "*")
+  .split(",").map(value => value.trim()).filter(Boolean);
+
+function isAllowedOrigin(origin) {
+  return !origin || allowedOrigins.includes("*") || allowedOrigins.includes(origin);
+}
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+  const origin = req.headers.origin;
+  if (isAllowedOrigin(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin || "*");
+  }
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Vary", "Origin");
 
   if (req.method === "OPTIONS") return res.sendStatus(204);
@@ -69,9 +77,14 @@ function asTime(minutes) {
     String(minutes % 60).padStart(2, "0");
 }
 
+function durationOf(service) {
+  const baseService = String(service || "").split(" + ")[0];
+  return durations.get(baseService);
+}
+
 function fitsSchedule(time, service) {
   const start = minuteOfDay(time);
-  const duration = durations.get(service);
+  const duration = durationOf(service);
   return Number.isFinite(start) && Number.isFinite(duration) &&
     start >= OPEN_MINUTES && start + duration <= CLOSE_MINUTES;
 }
@@ -79,12 +92,12 @@ function fitsSchedule(time, service) {
 function timeIsAvailable(time, service, existing) {
   if (!fitsSchedule(time, service)) return false;
   const start = minuteOfDay(time);
-  const end = start + durations.get(service);
+  const end = start + durationOf(service);
 
   return existing.every(row => {
     const bookedStart = minuteOfDay(row.time);
     // Для записей со старыми названиями используем безопасную длительность 2,5 часа.
-    const bookedDuration = durations.get(row.service) || 150;
+    const bookedDuration = durationOf(row.service) || 150;
     const bookedEnd = bookedStart + bookedDuration;
     // Запрет пересечений и трёхчасовой интервал между процедурами.
     return start >= bookedEnd + BREAK_MINUTES ||
@@ -113,6 +126,14 @@ const services = new Map([
   ["Донаращивание ногтя", "Донаращивание ногтя"],
   ["Наращивание", "Наращивание ногтя"],
   ["Наращивание ногтя", "Наращивание ногтя"]
+]);
+
+const extras = new Map([
+  ["", ""],
+  ["none", ""],
+  ["repair", "Ремонт ногтя"],
+  ["extension", "Донаращивание"],
+  ["nails", "Наращивание"]
 ]);
 
 function moscowParts() {
@@ -266,14 +287,16 @@ app.post("/api/bookings", async (req, res, next) => {
     const data = req.body || {};
     const name = typeof data.name === "string" ? data.name.trim() : "";
     const phone = typeof data.phone === "string" ? data.phone.trim() : "";
-    const service = services.get(data.service);
+    const baseService = services.get(data.service);
+    const extra = extras.get(data.extra ?? "none");
+    const service = baseService && extra ? `${baseService} + ${extra}` : baseService;
     const { date, time } = data;
     const digits = phone.replace(/\D/g, "");
 
     if (name.length < 2 || name.length > 80 ||
         digits.length < 10 || digits.length > 15 ||
-        !service || !validDate(date) ||
-        !futureSlot(date, time) || !fitsSchedule(time, service)) {
+        !baseService || extra === undefined || !validDate(date) ||
+        !futureSlot(date, time) || !fitsSchedule(time, baseService)) {
       return res.status(400).json({
         error: "Проверьте имя, телефон, услугу, дату и время работы (12:00–20:00)."
       });
