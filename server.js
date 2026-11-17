@@ -412,7 +412,7 @@ async function start() {
     )
   `);
 
-  await pool.query("ALTER TABLE bookings ALTER COLUMN service TYPE TEXT");\n\n  await pool.query("ALTER TABLE bookings ALTER COLUMN service TYPE TEXT");
+  await pool.query("ALTER TABLE bookings ALTER COLUMN service TYPE TEXT");
 
   const port = Number(process.env.PORT || 3000);
   app.listen(port, "0.0.0.0", () => {
