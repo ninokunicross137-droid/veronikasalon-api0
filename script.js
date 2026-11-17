@@ -1,76 +1,74 @@
 const service = document.getElementById("service");
 const extra = document.getElementById("extra");
 const result = document.getElementById("result");
+const message = document.getElementById("message");
+const dateInput = document.getElementById("date");
+const form = document.getElementById("bookingForm");
+
+// Укажите здесь публичный адрес API из панели ONREZA, без завершающего слэша.
+const API_BASE = String(window.VERONIKA_API_URL || "").replace(/\/+$/, "");
 
 function calculatePrice() {
-    let total =
-        Number(service.value) +
-        Number(extra.value);
-
-    result.textContent =
-        "Стоимость: " + total + " ₽";
+    const total = Number(service.value) + Number(extra.value);
+    result.textContent = "Стоимость: " + total + " ₽";
 }
 
 service.addEventListener("change", calculatePrice);
 extra.addEventListener("change", calculatePrice);
 
-const dateInput = document.getElementById("date");
-
 const today = new Date();
 const localDate = new Date(
     today.getTime() - today.getTimezoneOffset() * 60000
 ).toISOString().split("T")[0];
-
 dateInput.min = localDate;
 
-let bookings = JSON.parse(
-    localStorage.getItem("bookings") || "[]"
-);
-
-document.getElementById("bookingForm")
-.addEventListener("submit", function(event) {
-
+form.addEventListener("submit", async function(event) {
     event.preventDefault();
+    message.textContent = "";
 
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const date = dateInput.value;
-    const time = document.getElementById("time").value;
-
-    const exists = bookings.some(
-        booking =>
-            booking.date === date &&
-            booking.time === time
-    );
-
-    if (exists) {
-        document.getElementById("message").textContent =
-            "Это время уже занято. Выберите другое.";
-
+    if (!API_BASE) {
+        message.textContent = "Сайт ещё не подключён к API. Укажите адрес API ONREZA в VERONIKA_API_URL.";
         return;
     }
 
-    const booking = {
-        name: name,
-        phone: phone,
-        service: service.options[service.selectedIndex].text,
-        date: date,
-        time: time,
-        price: Number(service.value) + Number(extra.value)
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = "Отправляем...";
+
+    const payload = {
+        name: document.getElementById("name").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        service: service.value === "1200" ? "basic" : "color",
+        extra: extra.value === "50" ? "repair" :
+            extra.value === "100" ? "extension" :
+            extra.value === "150" ? "nails" : "none",
+        date: dateInput.value,
+        time: document.getElementById("time").value
     };
 
-    bookings.push(booking);
+    try {
+        const response = await fetch(API_BASE + "/api/bookings", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
 
-    localStorage.setItem(
-        "bookings",
-        JSON.stringify(bookings)
-    );
+        if (!response.ok) {
+            throw new Error(data.error || "Не удалось сохранить запись.");
+        }
 
-    document.getElementById("message").textContent =
-        "Вы успешно записались! Вероника свяжется с вами.";
-
-    this.reset();
-
-    calculatePrice();
-
+        message.textContent = "Вы успешно записались! Вероника свяжется с вами.";
+        form.reset();
+        calculatePrice();
+    } catch (error) {
+        message.textContent = error.message === "Failed to fetch"
+            ? "Не удалось связаться с сервером. Проверьте адрес API и настройки CLIENT_ORIGIN."
+            : error.message;
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Записаться";
+    }
 });
+
+calculatePrice();
