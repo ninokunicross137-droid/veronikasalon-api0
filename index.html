@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#f2eddf">
+    <meta name="theme-color" content="#101714">
     <meta name="description" content="Маникюр от мастера Вероники. Аккуратный уход, красивое покрытие и онлайн-запись.">
     <title>VERONIKA / nail atelier — авторский маникюр</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,7 +39,7 @@
             </div>
             <div class="hero-note"><span class="note-line"></span><span>VERONIKA · NAIL ARTIST</span></div>
         </div>
-        <div class="hero-art" aria-label="Эстетичная композиция в оттенках розового">
+        <div class="hero-art" aria-label="Современная графическая композиция">
             <div class="art-orbit orbit-one"></div>
             <div class="art-orbit orbit-two"></div>
             <div class="art-sun"></div>
@@ -109,23 +109,19 @@
                 <input type="text" id="name" placeholder="Ваше имя" autocomplete="name" required>
                 <label for="phone">Номер телефона</label>
                 <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" autocomplete="tel" required>
-                <label for="service">Выберите услугу</label>
-                <select id="service">
-                    <option value="1200">Простой маникюр — 1 200 ₽</option>
-                    <option value="1800">Маникюр в один тон — 1 800 ₽</option>
-                </select>
-                <label for="extra">Дополнительно</label>
-                <select id="extra">
-                    <option value="0">Без дополнительных услуг</option>
-                    <option value="50">Ремонт — 50 ₽</option>
-                    <option value="100">Донаращивание — 100 ₽</option>
-                    <option value="150">Наращивание — 150 ₽</option>
-                </select>
+                <fieldset class="procedure-picker">
+                    <legend>Выберите процедуры <span>можно несколько</span></legend>
+                    <label class="procedure-option"><input type="checkbox" name="procedure" value="basic" data-price="1200" data-title="Простой маникюр"><span class="procedure-check"></span><span class="procedure-name">Простой маникюр<small>Аккуратная обработка</small></span><strong>1 200 ₽</strong></label>
+                    <label class="procedure-option"><input type="checkbox" name="procedure" value="color" data-price="1800" data-title="Маникюр в один тон"><span class="procedure-check"></span><span class="procedure-name">Маникюр в один тон<small>Обработка и покрытие</small></span><strong>1 800 ₽</strong></label>
+                    <label class="procedure-option"><input type="checkbox" name="procedure" value="repair" data-price="50" data-title="Ремонт ногтя"><span class="procedure-check"></span><span class="procedure-name">Ремонт ногтя<small>За один ноготь</small></span><strong>50 ₽</strong></label>
+                    <label class="procedure-option"><input type="checkbox" name="procedure" value="extension" data-price="100" data-title="Донаращивание ногтя"><span class="procedure-check"></span><span class="procedure-name">Донаращивание<small>За один ноготь</small></span><strong>100 ₽</strong></label>
+                    <label class="procedure-option"><input type="checkbox" name="procedure" value="nails" data-price="150" data-title="Наращивание ногтя"><span class="procedure-check"></span><span class="procedure-name">Наращивание<small>За один ноготь</small></span><strong>150 ₽</strong></label>
+                </fieldset>
                 <div class="form-row">
                     <div><label for="date">Дата</label><input type="date" id="date" required></div>
                     <div><label for="time">Время</label><select id="time" required><option value="">Выберите</option><option value="12:00">12:00</option><option value="17:30">17:30</option></select></div>
                 </div>
-                <div id="result">Стоимость: 1 200 ₽</div>
+                <div id="result">Итого: 0 ₽</div>
                 <button class="primary-button submit-button" type="submit">Подтвердить запись <span>↗</span></button>
                 <p id="message" role="status" aria-live="polite"></p>
                 <p class="form-privacy">Нажимая кнопку, вы отправляете заявку на запись.</p>
