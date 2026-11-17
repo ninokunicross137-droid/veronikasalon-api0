@@ -362,7 +362,7 @@ async function start() {
     )
   `);
 
-  const port = Number(process.env.PORT || 3000);
+  await pool.query("ALTER TABLE bookings ALTER COLUMN service TYPE TEXT");\n\n  const port = Number(process.env.PORT || 3000);
   app.listen(port, "0.0.0.0", () => {
     console.log(`VERONIKA API started on ${port}`);
   });
