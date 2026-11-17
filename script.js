@@ -2,7 +2,7 @@ const result = document.getElementById("result");
 const message = document.getElementById("message");
 const dateInput = document.getElementById("date");
 const form = document.getElementById("bookingForm");
-const API_BASE = String(window.VERONIKA_API_URL || "").replace(/\\/+$/, "");
+const API_BASE = String(window.VERONIKA_API_URL || "").replace(/\/+$/, "");
 const procedureInputs = [...document.querySelectorAll('input[name="procedure"]')];
 
 function selectedProcedures() {
