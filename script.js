@@ -1,5 +1,6 @@
 const result = document.getElementById("result");
 const message = document.getElementById("message");
+const bookingSuccess = document.getElementById("bookingSuccess");
 const dateInput = document.getElementById("date");
 const form = document.getElementById("bookingForm");
 const API_BASE = String(window.VERONIKA_API_URL || "").replace(/\/+$/, "");
@@ -48,9 +49,14 @@ form.addEventListener("submit", async event => {
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(data.error || "Не удалось сохранить запись.");
-        message.textContent = "Вы успешно записались! Вероника свяжется с вами.";
-        form.reset();
-        calculatePrice();
+        const total = selected.reduce((sum, input) => sum + Number(input.dataset.price), 0);
+        document.getElementById("successName").textContent = payload.name;
+        document.getElementById("successDate").textContent = new Date(payload.date + "T12:00:00").toLocaleDateString("ru-RU", {day:"numeric", month:"long", year:"numeric"}) + " · " + payload.time;
+        document.getElementById("successServices").textContent = selected.map(input => input.dataset.title).join(", ");
+        document.getElementById("successTotal").textContent = total.toLocaleString("ru-RU") + " ₽";
+        form.hidden = true;
+        bookingSuccess.hidden = false;
+        bookingSuccess.scrollIntoView({behavior:"smooth", block:"center"});
     } catch (error) {
         message.textContent = error.message === "Failed to fetch"
             ? "Не удалось связаться с сервером. Проверьте подключение."
@@ -61,3 +67,12 @@ form.addEventListener("submit", async event => {
     }
 });
 calculatePrice();
+
+document.getElementById("bookAgain").addEventListener("click", () => {
+    bookingSuccess.hidden = true;
+    form.hidden = false;
+    form.reset();
+    message.textContent = "";
+    calculatePrice();
+    form.scrollIntoView({behavior:"smooth", block:"start"});
+});
