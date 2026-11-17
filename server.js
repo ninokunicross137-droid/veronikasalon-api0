@@ -78,8 +78,10 @@ function asTime(minutes) {
 }
 
 function durationOf(service) {
-  const baseService = String(service || "").split(" + ")[0];
-  return durations.get(baseService);
+  return String(service || "").split(" + ").reduce((total, item) => {
+    const duration = durations.get(item.trim());
+    return total + (duration || 0);
+  }, 0) || undefined;
 }
 
 function fitsSchedule(time, service) {
@@ -287,16 +289,17 @@ app.post("/api/bookings", async (req, res, next) => {
     const data = req.body || {};
     const name = typeof data.name === "string" ? data.name.trim() : "";
     const phone = typeof data.phone === "string" ? data.phone.trim() : "";
-    const baseService = services.get(data.service);
-    const extra = extras.get(data.extra ?? "none");
-    const service = baseService && extra ? `${baseService} + ${extra}` : baseService;
+    const chosen = Array.isArray(data.services)
+      ? [...new Set(data.services)].map(value => services.get(value)).filter(Boolean)
+      : [services.get(data.service)].filter(Boolean);
+    const service = chosen.join(" + ");
     const { date, time } = data;
     const digits = phone.replace(/\D/g, "");
 
     if (name.length < 2 || name.length > 80 ||
         digits.length < 10 || digits.length > 15 ||
-        !baseService || extra === undefined || !validDate(date) ||
-        !futureSlot(date, time) || !fitsSchedule(time, baseService)) {
+        !chosen.length || chosen.length !== (Array.isArray(data.services) ? new Set(data.services).size : 1) || !validDate(date) ||
+        !futureSlot(date, time) || !fitsSchedule(time, service)) {
       return res.status(400).json({
         error: "Проверьте имя, телефон, услугу, дату и время работы (12:00–20:00)."
       });
@@ -362,7 +365,9 @@ async function start() {
     )
   `);
 
-  await pool.query("ALTER TABLE bookings ALTER COLUMN service TYPE TEXT");\n\n  const port = Number(process.env.PORT || 3000);
+  await pool.query("ALTER TABLE bookings ALTER COLUMN service TYPE TEXT");\n\n  await pool.query("ALTER TABLE bookings ALTER COLUMN service TYPE TEXT");
+
+  const port = Number(process.env.PORT || 3000);
   app.listen(port, "0.0.0.0", () => {
     console.log(`VERONIKA API started on ${port}`);
   });
