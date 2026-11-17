@@ -281,6 +281,48 @@ app.get("/api/bookings", adminLimiter, async (req, res, next) => {
   }
 });
 
+// Отправка уведомления о новой записи через Resend.
+// RESEND_API_KEY и EMAIL_FROM задаются в переменных окружения хостинга.
+const BOOKING_EMAIL_TO = process.env.BOOKING_EMAIL_TO || "simon.mednikov@gmail.com";
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>\"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+  })[char]);
+}
+
+async function sendBookingEmail({ name, phone, date, time, service }) {
+  if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) {
+    console.warn("Email notification skipped: RESEND_API_KEY or EMAIL_FROM is not configured.");
+    return false;
+  }
+
+  const safe = {
+    name: escapeHtml(name), phone: escapeHtml(phone), date: escapeHtml(date),
+    time: escapeHtml(time), service: escapeHtml(service)
+  };
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: process.env.EMAIL_FROM,
+      to: [BOOKING_EMAIL_TO],
+      subject: `Новая запись в Veronika Salon — ${date} ${time}`,
+      html: `<h2>Новая запись в Veronika Salon</h2><p><b>Имя:</b> ${safe.name}</p><p><b>Телефон:</b> ${safe.phone}</p><p><b>Дата:</b> ${safe.date}</p><p><b>Время:</b> ${safe.time}</p><p><b>Процедуры:</b> ${safe.service}</p>`
+    })
+  });
+
+  if (!response.ok) {
+    const details = await response.text().catch(() => "");
+    console.error("Booking email failed:", response.status, details.slice(0, 300));
+    return false;
+  }
+  return true;
+}
+
 // Транзакционная запись: блокируем выбранную дату, чтобы два человека
 // одновременно не заняли пересекающееся время.
 app.post("/api/bookings", async (req, res, next) => {
@@ -325,8 +367,13 @@ app.post("/api/bookings", async (req, res, next) => {
       [date, time, name, phone, service]
     );
     await client.query("COMMIT");
+    const emailSent = await sendBookingEmail({ name, phone, date, time, service }).catch(error => {
+      console.error("Booking email error:", error.message);
+      return false;
+    });
     res.status(201).json({
       success: true,
+      emailSent,
       message: "Запись успешно сохранена.",
       date,
       time
